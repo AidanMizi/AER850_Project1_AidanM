@@ -11,10 +11,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LogisticRegression
+from sklearn import svm
 from sklearn.metrics import mean_absolute_error
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_val_score, GridSearchCV
 
 
 # READ DATA
@@ -85,31 +86,54 @@ print("Step correlation value with Z: ", corrZ)
 my_splitter = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
 
 for train_index, test_index in my_splitter.split(data, data['Step']):
-    stratDataTrain = data.iloc[train_index].reset_index(drop=True)
-    stratDataTest = data.iloc[test_index].reset_index(drop=True)
+    trainData = data.iloc[train_index].reset_index(drop=True)
+    testData = data.iloc[test_index].reset_index(drop=True)
 #stratDataTrain = stratDataTrain.drop(columns=["Step"], axis=1)
 #stratDataTest = stratDataTest.drop(columns=["Step"], axis=1)
 
 # define variables
-y_train = stratDataTrain['Step']
-x_train = stratDataTrain.drop(columns=['Step'])
-y_test = stratDataTest['Step']
-x_test = stratDataTest.drop(columns=['Step'])
+# since we want to predict the step value based on coordinates,
+# 
+y_train = trainData['Step']
+x_train = trainData.drop(columns=['Step'])
+y_test = testData['Step']
+x_test = testData.drop(columns=['Step'])
+
+# scale the variables so their weights are influenced by their values
+sc = StandardScaler()
+sc.fit(x_train)
+x_train = sc.transform(x_train)
+x_test = sc.transform(x_test)
+
+# Use GridSearchCV to find best parameters for each model and 
+# train models, then produce predictions from training data
+# model 1 - logistic regression
+model1 = LogisticRegression()
+model1.fit(x_train, y_train)
+model1_pred = model1.predict(x_train)
+
+# model 2 - support vector machine
+model2 = svm.SVC()
+param_grid2 = {
+    'C': [0.1, 1, 10],
+    'kernel': ['linear', 'rbf', 'poly', 'sigmoid'],
+    'gamma': ['scale', 'auto', 10]
+}
+gridSearch2 = GridSearchCV(estimator=model2, param_grid=param_grid2, cv=2, )
+
+
+model2.fit(x_train, y_train)
+model2_pred = model2.predict(x_train)
+
+# model 3 - random forest
+model3 = RandomForestRegressor(n_estimators=10, random_state=42)
+model3.fit(x_train, y_train)
+model3_pred = model3.predict(x_train)
 
 
 
-# # The use of stratified sampling is strongly recommended
-# data["income_categories"] = pd.cut(data["median_income"],
-#                           bins=[0, 2, 4, 6, np.inf],
-#                           labels=[1, 2, 3, 4])
-# my_splitter = StratifiedShuffleSplit(n_splits = 1,
-#                                test_size = 0.2,
-#                                random_state = 42)
-# for train_index, test_index in my_splitter.split(data, data["income_categories"]):
-#     strat_data_train = data.loc[train_index].reset_index(drop=True)
-#     strat_data_test = data.loc[test_index].reset_index(drop=True)
-# strat_data_train = strat_data_train.drop(columns=["income_categories"], axis = 1)
-# strat_data_test = strat_data_test.drop(columns=["income_categories"], axis = 1)
+
+
 
 
 
