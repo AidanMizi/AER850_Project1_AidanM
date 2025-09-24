@@ -17,19 +17,46 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import cross_val_score
 
 
-# read data
+# READ DATA
 data = pd.read_csv("Project 1 Data.csv")
 
+# identify step index bounds
+stepBounds = [0]
+for i in range (len(data['Step'])):
+    if data.iloc[i,3] != data.iloc[i-1, 3]:
+        stepBounds.append(i)
+# this is done so each step can be visualized 
 
-# visualize the data
-data.hist()
-# this simple histogram of the data shows the changes in x, y, and z
-# over the steps, which can help us visualize the shape of line of best
-# fit the ML model might apply to each
+
+# VISUALIZE THE DATA
+##data.hist(bins=13,edgecolor='black')
+# this simple histogram of the data shows how many times each x, y, 
+# and z coordinate occur. This helps us see that z has a good distribution
+# of values, while y only has a few positions, and x is somewhat in the middle.
+# This also helps us see that most of the movement is done in the z direction
 # 
 # this also shows that most of the amount of steps are made up of
-# steps 8 and 9, something we have to account for when splitting the 
+# steps 7, 8, and 9, something we have to account for when splitting the 
 # data for training and testing
+
+# plot x, y, and z for each step 7, 8, 9
+# step 7 plot
+fig, plot789 = plt.subplots(nrows=2,ncols=2)
+plot789[0,0].plot(data.iloc[stepBounds[7]:stepBounds[8],0], np.linspace(0, stepBounds[8]-stepBounds[7], num=stepBounds[8]-stepBounds[7]))
+plot789[0,0].plot(data.iloc[stepBounds[7]:stepBounds[8],1], np.linspace(0, stepBounds[8]-stepBounds[7], num=stepBounds[8]-stepBounds[7]))
+plot789[0,0].plot(data.iloc[stepBounds[7]:stepBounds[8],2], np.linspace(0, stepBounds[8]-stepBounds[7], num=stepBounds[8]-stepBounds[7]))
+# step 8 plot
+plot789[0,1].plot(data.iloc[stepBounds[8]:stepBounds[9],0], np.linspace(0, stepBounds[9]-stepBounds[8], num=stepBounds[9]-stepBounds[8]))
+plot789[0,1].plot(data.iloc[stepBounds[8]:stepBounds[9],1], np.linspace(0, stepBounds[9]-stepBounds[8], num=stepBounds[9]-stepBounds[8]))
+plot789[0,1].plot(data.iloc[stepBounds[8]:stepBounds[9],2], np.linspace(0, stepBounds[9]-stepBounds[8], num=stepBounds[9]-stepBounds[8]))
+# step 9 plot
+plot789[1,0].plot(data.iloc[stepBounds[9]:stepBounds[10],0], np.linspace(0, stepBounds[10]-stepBounds[9], num=stepBounds[10]-stepBounds[9]))
+plot789[1,0].plot(data.iloc[stepBounds[9]:stepBounds[10],1], np.linspace(0, stepBounds[10]-stepBounds[9], num=stepBounds[10]-stepBounds[9]))
+plot789[1,0].plot(data.iloc[stepBounds[9]:stepBounds[10],2], np.linspace(0, stepBounds[10]-stepBounds[9], num=stepBounds[10]-stepBounds[9]))
+
+# these histograms show the changes in x, y, and z over the steps 7 to 9, 
+# which can help us visualize the shape of line of best
+# fit the ML model might apply to each
 
 
 
