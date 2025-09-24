@@ -53,10 +53,37 @@ plot789[0,1].plot(data.iloc[stepBounds[8]:stepBounds[9],2], np.linspace(0, stepB
 plot789[1,0].plot(data.iloc[stepBounds[9]:stepBounds[10],0], np.linspace(0, stepBounds[10]-stepBounds[9], num=stepBounds[10]-stepBounds[9]))
 plot789[1,0].plot(data.iloc[stepBounds[9]:stepBounds[10],1], np.linspace(0, stepBounds[10]-stepBounds[9], num=stepBounds[10]-stepBounds[9]))
 plot789[1,0].plot(data.iloc[stepBounds[9]:stepBounds[10],2], np.linspace(0, stepBounds[10]-stepBounds[9], num=stepBounds[10]-stepBounds[9]))
-
 # these histograms show the changes in x, y, and z over the steps 7 to 9, 
 # which can help us visualize the shape of line of best
 # fit the ML model might apply to each
+
+
+# CORRELATION ANALYSIS
+# plot heatmap
+plt.figure()
+corr_matrix = data.corr()
+sns.heatmap(np.abs(corr_matrix))
+# find correlation values for x, y, and z with step
+# correlation with step and x
+corrX = np.abs(data.iloc[:,3].corr(data.iloc[:,0]))
+print("Step correlation value with X: ", corrX)
+# correlation with step and y
+corrY = np.abs(data.iloc[:,3].corr(data.iloc[:,1]))
+print("Step correlation value with Y: ", corrY)
+# correlation with step and z
+corrZ = np.abs(data.iloc[:,3].corr(data.iloc[:,2]))
+print("Step correlation value with Z: ", corrZ)
+
+
+
+
+
+
+
+
+
+
+
 
 
 
