@@ -32,7 +32,7 @@ for i in range (len(data['Step'])):
 ##data.hist(bins=13,edgecolor='black')
 # this simple histogram of the data shows how many times each x, y, 
 # and z coordinate occur. This helps us see that z has a good distribution
-# of values, while y only has a few positions, and x is somewhat in the middle.
+# of values, while x and y have a little more random distribution.
 # This also helps us see that most of the movement is done in the z direction
 # 
 # this also shows that most of the amount of steps are made up of
@@ -73,8 +73,43 @@ print("Step correlation value with Y: ", corrY)
 # correlation with step and z
 corrZ = np.abs(data.iloc[:,3].corr(data.iloc[:,2]))
 print("Step correlation value with Z: ", corrZ)
+# Based on the correlation values, I can see that X has the highest correlation
+# to step size, while Z has the lowest. This tells me I should use the X data
+# to train my models against the step number
 
 
+# CLASSIFICATION MODEL DEVELOPMENT
+# will use logistic regression, support vector machines, and random forest
+
+# split data into training and testing data evenly across each step
+my_splitter = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
+
+for train_index, test_index in my_splitter.split(data, data['Step']):
+    stratDataTrain = data.iloc[train_index].reset_index(drop=True)
+    stratDataTest = data.iloc[test_index].reset_index(drop=True)
+#stratDataTrain = stratDataTrain.drop(columns=["Step"], axis=1)
+#stratDataTest = stratDataTest.drop(columns=["Step"], axis=1)
+
+# define variables
+y_train = stratDataTrain['Step']
+x_train = stratDataTrain.drop(columns=['Step'])
+y_test = stratDataTest['Step']
+x_test = stratDataTest.drop(columns=['Step'])
+
+
+
+# # The use of stratified sampling is strongly recommended
+# data["income_categories"] = pd.cut(data["median_income"],
+#                           bins=[0, 2, 4, 6, np.inf],
+#                           labels=[1, 2, 3, 4])
+# my_splitter = StratifiedShuffleSplit(n_splits = 1,
+#                                test_size = 0.2,
+#                                random_state = 42)
+# for train_index, test_index in my_splitter.split(data, data["income_categories"]):
+#     strat_data_train = data.loc[train_index].reset_index(drop=True)
+#     strat_data_test = data.loc[test_index].reset_index(drop=True)
+# strat_data_train = strat_data_train.drop(columns=["income_categories"], axis = 1)
+# strat_data_test = strat_data_test.drop(columns=["income_categories"], axis = 1)
 
 
 
