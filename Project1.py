@@ -16,6 +16,7 @@ from sklearn import svm
 from sklearn.metrics import mean_absolute_error
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import cross_val_score, GridSearchCV
+from sklearn.metrics import classification_report, confusion_matrix
 
 
 # READ DATA
@@ -112,18 +113,31 @@ model1 = LogisticRegression()
 model1.fit(x_train, y_train)
 model1_pred = model1.predict(x_train)
 
+
+
 # model 2 - support vector machine
 model2 = svm.SVC()
 param_grid2 = {
-    'C': [0.1, 1, 10],
+    'C': [0.001, 0.1, 1, 10],
     'kernel': ['linear', 'rbf', 'poly', 'sigmoid'],
-    'gamma': ['scale', 'auto', 10]
+    'gamma': ['scale', 'auto']
 }
-gridSearch2 = GridSearchCV(estimator=model2, param_grid=param_grid2, cv=2, )
+gridSearch2 = GridSearchCV(estimator=model2, param_grid=param_grid2, refit=True)
+gridSearch2.fit(x_train, y_train)
+
+print("Best parameters for SVM model: \n", gridSearch2.best_params_)
+
+model2_grid_pred = gridSearch2.predict(x_train)
+print("Classification report for tuned SVM model: /n", classification_report(y_test,model2_grid_pred))
+
+
+
 
 
 model2.fit(x_train, y_train)
 model2_pred = model2.predict(x_train)
+
+
 
 # model 3 - random forest
 model3 = RandomForestRegressor(n_estimators=10, random_state=42)
