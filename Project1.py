@@ -21,7 +21,15 @@ from sklearn.model_selection import cross_val_score
 data = pd.read_csv("Project 1 Data.csv")
 
 
-
+# visualize the data
+data.hist()
+# this simple histogram of the data shows the changes in x, y, and z
+# over the steps, which can help us visualize the shape of line of best
+# fit the ML model might apply to each
+# 
+# this also shows that most of the amount of steps are made up of
+# steps 8 and 9, something we have to account for when splitting the 
+# data for training and testing
 
 
 
