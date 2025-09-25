@@ -99,15 +99,15 @@ for train_index, test_index in my_splitter.split(data, data['Step']):
 # since we want to predict the step value based on coordinates,
 # 
 y_train = trainData['Step']
-x_train = trainData.drop(columns=['Step'])
+x_train = trainData.drop('Step', axis=1)
 y_test = testData['Step']
-x_test = testData.drop(columns=['Step'])
+x_test = testData.drop('Step', axis=1)
 
 # scale the variables so their weights are influenced by their values
-sc = StandardScaler()
-sc.fit(x_train)
-x_train = sc.transform(x_train)
-x_test = sc.transform(x_test)
+# sc = StandardScaler()
+# sc.fit(x_train)
+# x_train = sc.transform(x_train)
+# x_test = sc.transform(x_test)
 
 # Use GridSearchCV to find best parameters for each model and 
 # train models, then produce predictions from training data
@@ -116,7 +116,7 @@ scoringArg = ['f1', 'precision', 'accuracy']
 model1 = LogisticRegression()
 param_grid1 = {
     'penalty': ['l2', 'elasticnet'],
-    'C': [1.0, 0.1, 0.001] }
+    'C': [1.0, 0.1, 0.001, 0.0001] }
 gridSearch1 = GridSearchCV(estimator=model1, param_grid=param_grid1, scoring=scoringArg, refit='accuracy')
 gridSearch1.fit(x_train, y_train)
 print("Best parameters for Logistic Regression model: \n", gridSearch1.best_params_)
@@ -125,7 +125,7 @@ print("Best parameters for Logistic Regression model: \n", gridSearch1.best_para
 # model 2 - support vector machine
 model2 = svm.SVC()
 param_grid2 = {
-    'C': [0.001, 0.1, 1, 10],
+    'C': [0.001, 0.1, 1, 10, 25],
     'kernel': ['linear', 'rbf', 'poly', 'sigmoid'],
     'gamma': ['scale', 'auto'] }
 gridSearch2 = GridSearchCV(estimator=model2, param_grid=param_grid2, scoring=scoringArg, refit='accuracy')
@@ -143,7 +143,7 @@ print("Best parameters for Random Forest model: \n", gridSearch3.best_params_)
 # model 4 - logistic regression (RandomizedSearchCV)
 model4 = LogisticRegression()
 param_grid4 = {
-        'C': np.linspace(1, 0.001, 3) }
+        'C': np.linspace(1, 0.0001, 5) }
 gridSearch4 = RandomizedSearchCV(estimator=model4, param_distributions=param_grid4, scoring=scoringArg, refit='accuracy')
 gridSearch4.fit(x_train, y_train)
 print("Best parameters for Logistic Regression model (with RandomizedSearchCV): \n", gridSearch4.best_params_)
@@ -175,7 +175,7 @@ print("Support Vector Machines performance: \n", report2)
 print("Random Forest Classifier performance: \n", report3)
 print("Logistic Regression with RandomizedSearchCV performance: \n", report4)
 
-# based on the results, I choose randomf forest classifier since it got all
+# based on the results, I choose random forest classifier since it got all
 # the predictions correct
 
 # produce confusion matrix for selected model (random forest)
@@ -188,10 +188,8 @@ dispConf.plot()
 
 
 # STACKED MODEL PERFORMANCE ANALYSIS
-# model 1 and model 2 were chosen for this part since they were the two
-# worst performing models and thus have the most room to perform better.
-# model 3 performed perfectly so there can't be any improvement, and model 4
-# is the same as model 1 but with RandomizedSearchCV and performed the same
+# model 1 and model 2 were chosen for this part.
+# model 2 and 3 performed perfectly.
 estimatorsList = [
     ('lr', LogisticRegression())    
 ]
