@@ -17,6 +17,7 @@ from sklearn.metrics import mean_absolute_error
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import cross_val_score, GridSearchCV, RandomizedSearchCV
 from sklearn.metrics import classification_report, confusion_matrix, f1_score, ConfusionMatrixDisplay
+from sklearn.ensemble import StackingClassifier
 
 
 # READ DATA
@@ -185,6 +186,22 @@ dispConf.plot()
 
 
 # STACKED MODEL PERFORMANCE ANALYSIS
+# model 1 and model 2 were chosen for this part since they were the two
+# worst performing models and thus have the most room to perform better.
+# model 3 performed perfectly so there can't be any improvement, and model 4
+# is the same as model 1 but with RandomizedSearchCV and performed the same
+stackClass = StackingClassifier(estimators=model1, final_estimator=model2)
+stackClass.fit(x_train, y_train)
+y_pred5 = stackClass.predict(x_test)
+report5 = classification_report(y_test, y_pred5)
+print("Logistic Regression stack with Support Vector Machines performance: \n", report5)
+conf2 = confusion_matrix(y_test, y_pred5)
+dispconf2 = ConfusionMatrixDisplay(confusion_matrix=conf2, display_labels=display_labels)
+dispconf2.plot()
+
+
+
+# MODEL EVALUATION
 
 
 
