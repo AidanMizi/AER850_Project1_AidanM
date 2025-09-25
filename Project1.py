@@ -117,7 +117,7 @@ model1 = LogisticRegression()
 param_grid1 = {
     'penalty': ['l2', 'elasticnet'],
     'C': [1.0, 0.1, 0.001] }
-gridSearch1 = GridSearchCV(estimator=model1, param_grid=param_grid1, scoring=scoringArg, refit='f1')
+gridSearch1 = GridSearchCV(estimator=model1, param_grid=param_grid1, scoring=scoringArg, refit='accuracy')
 gridSearch1.fit(x_train, y_train)
 print("Best parameters for Logistic Regression model: \n", gridSearch1.best_params_)
 
@@ -128,15 +128,15 @@ param_grid2 = {
     'C': [0.001, 0.1, 1, 10],
     'kernel': ['linear', 'rbf', 'poly', 'sigmoid'],
     'gamma': ['scale', 'auto'] }
-gridSearch2 = GridSearchCV(estimator=model2, param_grid=param_grid2, scoring=scoringArg, refit='f1')
+gridSearch2 = GridSearchCV(estimator=model2, param_grid=param_grid2, scoring=scoringArg, refit='accuracy')
 gridSearch2.fit(x_train, y_train)
 print("Best parameters for SVM model: \n", gridSearch2.best_params_)
 
 # model 3 - random forest
 model3 = RandomForestClassifier()
 param_grid3 = {
-    'n_estimators': [25, 50, 100, 150] }
-gridSearch3 = GridSearchCV(estimator=model3, param_grid=param_grid3, scoring=scoringArg, refit='f1')
+    'n_estimators': [50, 100, 150] }
+gridSearch3 = GridSearchCV(estimator=model3, param_grid=param_grid3, scoring=scoringArg, refit='accuracy')
 gridSearch3.fit(x_train, y_train)
 print("Best parameters for Random Forest model: \n", gridSearch3.best_params_)
 
@@ -144,7 +144,7 @@ print("Best parameters for Random Forest model: \n", gridSearch3.best_params_)
 model4 = LogisticRegression()
 param_grid4 = {
         'C': np.linspace(1, 0.001, 3) }
-gridSearch4 = RandomizedSearchCV(estimator=model4, param_distributions=param_grid4, scoring=scoringArg, refit='f1')
+gridSearch4 = RandomizedSearchCV(estimator=model4, param_distributions=param_grid4, scoring=scoringArg, refit='accuracy')
 gridSearch4.fit(x_train, y_train)
 print("Best parameters for Logistic Regression model (with RandomizedSearchCV): \n", gridSearch4.best_params_)
 
@@ -195,9 +195,9 @@ dispConf.plot()
 estimatorsList = [
     ('lr', LogisticRegression())    
 ]
-stackClass = StackingClassifier(estimators=estimatorsList, final_estimator=svm.SVC())
-stackClass.fit(x_train, y_train)
-y_pred5 = stackClass.predict(x_test)
+model5 = StackingClassifier(estimators=estimatorsList, final_estimator=svm.SVC())
+model5.fit(x_train, y_train)
+y_pred5 = model5.predict(x_test)
 report5 = classification_report(y_test, y_pred5)
 print("Logistic Regression stack with Support Vector Machines performance: \n", report5)
 conf2 = confusion_matrix(y_test, y_pred5)
@@ -209,7 +209,7 @@ dispconf2.plot()
 # MODEL EVALUATION
 # save the model
 modelName = 'Project1_ML_Model.joblib'
-joblib.dump(model3, modelName)
+joblib.dump(model1, modelName)
 print("\nModel 3 - Random Forest Classifier - saved as Project1_ML_Model.joblib")
 
 # load the model and 
