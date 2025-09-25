@@ -16,7 +16,7 @@ from sklearn import svm
 from sklearn.metrics import mean_absolute_error
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import cross_val_score, GridSearchCV, RandomizedSearchCV
-from sklearn.metrics import classification_report, confusion_matrix, f1_score
+from sklearn.metrics import classification_report, confusion_matrix, f1_score, ConfusionMatrixDisplay
 
 
 # READ DATA
@@ -148,13 +148,42 @@ print("Best parameters for Logistic Regression model (with RandomizedSearchCV): 
 
 # MODEL PERFORMANCE ANALYSIS
 # recreate models with best found parameters
-
+model1 = LogisticRegression(**gridSearch1.best_params_)
+model2 = svm.SVC(**gridSearch2.best_params_)
+model3 = RandomForestClassifier(**gridSearch3.best_params_)
+model4 = LogisticRegression(**gridSearch4.best_params_)
+# fit all the models to testing data
+model1.fit(x_test, y_test)
+model2.fit(x_test, y_test)
+model3.fit(x_test, y_test)
+model4.fit(x_test, y_test)
 # predict all models
-y_pred1 = model1.predict(x_train)
-y_pred2 = model2.predict(x_train)
-y_pred3 = model3.predict(x_train)
-y_pred4 = model4.predict(x_train)
+y_pred1 = model1.predict(x_test)
+y_pred2 = model2.predict(x_test)
+y_pred3 = model3.predict(x_test)
+y_pred4 = model4.predict(x_test)
 # produce classification reports to compare performance
+report1 = classification_report(y_test, y_pred1)
+report2 = classification_report(y_test, y_pred2)
+report3 = classification_report(y_test, y_pred3)
+report4 = classification_report(y_test, y_pred4)
+print("Logistic Regression performance: \n", report1)
+print("Support Vector Machines performance: \n", report2)
+print("Random Forest Classifier performance: \n", report3)
+print("Logistic Regression with RandomizedSearchCV performance: \n", report4)
+
+# based on the results, I choose whatever model update this when I run it yo
+
+# produce confusion matrix for selected model
+conf = confusion_matrix(y_test, y_pred1)
+
+# display the confusion matrix
+display_labels = ['Correct', 'Incorrect', 'Incorrect', 'Correct']
+dispConf = ConfusionMatrixDisplay(confusion_matrix=conf, display_labels=display_labels)
+dispConf.plot()
+
+
+
 
 
 
