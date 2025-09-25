@@ -18,6 +18,8 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import cross_val_score, GridSearchCV, RandomizedSearchCV
 from sklearn.metrics import classification_report, confusion_matrix, f1_score, ConfusionMatrixDisplay
 from sklearn.ensemble import StackingClassifier
+from joblib import dump, load
+import joblib
 
 
 # READ DATA
@@ -190,7 +192,10 @@ dispConf.plot()
 # worst performing models and thus have the most room to perform better.
 # model 3 performed perfectly so there can't be any improvement, and model 4
 # is the same as model 1 but with RandomizedSearchCV and performed the same
-stackClass = StackingClassifier(estimators=model1, final_estimator=model2)
+estimatorsList = [
+    ('lr', LogisticRegression())    
+]
+stackClass = StackingClassifier(estimators=estimatorsList, final_estimator=svm.SVC())
 stackClass.fit(x_train, y_train)
 y_pred5 = stackClass.predict(x_test)
 report5 = classification_report(y_test, y_pred5)
@@ -202,10 +207,17 @@ dispconf2.plot()
 
 
 # MODEL EVALUATION
+# save the model
+modelName = 'Project1_ML_Model.joblib'
+joblib.dump(model3, modelName)
+print("\nModel 3 - Random Forest Classifier - saved as Project1_ML_Model.joblib")
 
-
-
-
+# load the model and 
+loadedModel = joblib.load(modelName)
+print("\nModel loaded")
+givenData = pd.DataFrame([[9.375,3.0625,1.51], [6.995,5.125,0.3875], [0,3.0625,1.93], [9.4,3,1.8], [9.4,3,1.3]])
+loadedPredictions = loadedModel.predict(givenData)
+print("Predictions for the given data: \n", givenData, "\n", loadedPredictions)
 
 
 
