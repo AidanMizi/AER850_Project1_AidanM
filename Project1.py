@@ -179,8 +179,8 @@ print("Logistic Regression with RandomizedSearchCV performance: \n", report4)
 conf = confusion_matrix(y_test, y_pred3)
 
 # display the confusion matrix
-display_labels = ['Correct', 'Incorrect', 'Incorrect', 'Correct']
-dispConf = ConfusionMatrixDisplay(confusion_matrix=conf)
+display_labels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13']
+dispConf = ConfusionMatrixDisplay(confusion_matrix=conf, display_labels=display_labels)
 dispConf.plot()
 
 
