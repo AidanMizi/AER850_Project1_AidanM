@@ -14,9 +14,9 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn import svm
 from sklearn.metrics import mean_absolute_error
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import cross_val_score, GridSearchCV
-from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.metrics import classification_report, confusion_matrix, f1_score
 
 
 # READ DATA
@@ -108,10 +108,10 @@ x_test = sc.transform(x_test)
 
 # Use GridSearchCV to find best parameters for each model and 
 # train models, then produce predictions from training data
+scoringArg = ['f1', 'precision', 'accuracy']
 # model 1 - logistic regression
 model1 = LogisticRegression()
-model1.fit(x_train, y_train)
-model1_pred = model1.predict(x_train)
+
 
 
 
@@ -122,27 +122,26 @@ param_grid2 = {
     'kernel': ['linear', 'rbf', 'poly', 'sigmoid'],
     'gamma': ['scale', 'auto']
 }
-gridSearch2 = GridSearchCV(estimator=model2, param_grid=param_grid2, refit=True)
+gridSearch2 = GridSearchCV(estimator=model2, param_grid=param_grid2, scoring=scoringArg, refit=True)
 gridSearch2.fit(x_train, y_train)
 
 print("Best parameters for SVM model: \n", gridSearch2.best_params_)
 
-model2_grid_pred = gridSearch2.predict(x_train)
-print("Classification report for tuned SVM model: /n", classification_report(y_test,model2_grid_pred))
-
-
-
-
-
-model2.fit(x_train, y_train)
-model2_pred = model2.predict(x_train)
 
 
 
 # model 3 - random forest
-model3 = RandomForestRegressor(n_estimators=10, random_state=42)
-model3.fit(x_train, y_train)
-model3_pred = model3.predict(x_train)
+model3 = RandomForestClassifier()
+param_grid3 = {
+    'n_estimators': [25, 50, 100, 150],
+}
+gridSearch3 = GridSearchCV(estimator=model3, param_grid=param_grid3, scoring=scoringArg, refit=True)
+gridSearch3.fit(x_train, y_train)
+
+print("Best parameters for Random Forest model: \n", gridSearch3.best_params_)
+
+
+
 
 
 
