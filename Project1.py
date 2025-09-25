@@ -172,14 +172,15 @@ print("Support Vector Machines performance: \n", report2)
 print("Random Forest Classifier performance: \n", report3)
 print("Logistic Regression with RandomizedSearchCV performance: \n", report4)
 
-# based on the results, I choose whatever model update this when I run it yo
+# based on the results, I choose randomf forest classifier since it got all
+# the predictions correct
 
-# produce confusion matrix for selected model
-conf = confusion_matrix(y_test, y_pred1)
+# produce confusion matrix for selected model (random forest)
+conf = confusion_matrix(y_test, y_pred3)
 
 # display the confusion matrix
 display_labels = ['Correct', 'Incorrect', 'Incorrect', 'Correct']
-dispConf = ConfusionMatrixDisplay(confusion_matrix=conf, display_labels=display_labels)
+dispConf = ConfusionMatrixDisplay(confusion_matrix=conf)
 dispConf.plot()
 
 
