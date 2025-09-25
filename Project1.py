@@ -15,7 +15,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn import svm
 from sklearn.metrics import mean_absolute_error
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import cross_val_score, GridSearchCV
+from sklearn.model_selection import cross_val_score, GridSearchCV, RandomizedSearchCV
 from sklearn.metrics import classification_report, confusion_matrix, f1_score
 
 
@@ -111,8 +111,12 @@ x_test = sc.transform(x_test)
 scoringArg = ['f1', 'precision', 'accuracy']
 # model 1 - logistic regression
 model1 = LogisticRegression()
-
-
+param_grid1 = {
+    'penalty': ['l1', 'l2', 'elasticnet'],
+    'C': [1.0, 0.1, 0.001] }
+gridSearch1 = GridSearchCV(estimator=model1, param_grid=param_grid1, random_state=42, scoring=scoringArg, refit=True)
+gridSearch1.fit(x_train, y_train)
+print("Best parameters for Logistic Regression model: \n", gridSearch1.best_params_)
 
 
 # model 2 - support vector machine
@@ -120,27 +124,26 @@ model2 = svm.SVC()
 param_grid2 = {
     'C': [0.001, 0.1, 1, 10],
     'kernel': ['linear', 'rbf', 'poly', 'sigmoid'],
-    'gamma': ['scale', 'auto']
-}
-gridSearch2 = GridSearchCV(estimator=model2, param_grid=param_grid2, scoring=scoringArg, refit=True)
+    'gamma': ['scale', 'auto'] }
+gridSearch2 = GridSearchCV(estimator=model2, param_grid=param_grid2, random_state=42, scoring=scoringArg, refit=True)
 gridSearch2.fit(x_train, y_train)
-
 print("Best parameters for SVM model: \n", gridSearch2.best_params_)
-
-
-
 
 # model 3 - random forest
 model3 = RandomForestClassifier()
 param_grid3 = {
-    'n_estimators': [25, 50, 100, 150],
-}
-gridSearch3 = GridSearchCV(estimator=model3, param_grid=param_grid3, scoring=scoringArg, refit=True)
+    'n_estimators': [25, 50, 100, 150] }
+gridSearch3 = GridSearchCV(estimator=model3, param_grid=param_grid3, random_state=42, scoring=scoringArg, refit=True)
 gridSearch3.fit(x_train, y_train)
-
 print("Best parameters for Random Forest model: \n", gridSearch3.best_params_)
 
-
+# model 4 - logistic regression (RandomizedSearchCV)
+model4 = LogisticRegression()
+param_grid4 = {
+        'C': np.linspace(1, 0.001, 3) }
+gridSearch4 = RandomizedSearchCV(estimator=model4, param_distributions=param_grid4, random_state=42, scoring=scoringArg, refit=True)
+gridSearch4.fit(x_train, y_train)
+print("Best parameters for Logistic Regression model (with RandomizedSearchCV): \n", gridSearch4.best_params_)
 
 
 
