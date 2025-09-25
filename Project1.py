@@ -103,11 +103,6 @@ x_train = trainData.drop('Step', axis=1)
 y_test = testData['Step']
 x_test = testData.drop('Step', axis=1)
 
-# scale the variables so their weights are influenced by their values
-# sc = StandardScaler()
-# sc.fit(x_train)
-# x_train = sc.transform(x_train)
-# x_test = sc.transform(x_test)
 
 # Use GridSearchCV to find best parameters for each model and 
 # train models, then produce predictions from training data
