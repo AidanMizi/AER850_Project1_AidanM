@@ -148,6 +148,7 @@ print("Best parameters for Logistic Regression model (with RandomizedSearchCV): 
 
 # MODEL PERFORMANCE ANALYSIS
 # recreate models with best found parameters
+
 # predict all models
 y_pred1 = model1.predict(x_train)
 y_pred2 = model2.predict(x_train)
