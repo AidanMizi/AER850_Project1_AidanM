@@ -5,15 +5,12 @@
 
 # imports
 import pandas as pd
-from sklearn.preprocessing import OneHotEncoder
 from sklearn.model_selection import train_test_split, StratifiedShuffleSplit
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn import svm
-from sklearn.metrics import mean_absolute_error
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import cross_val_score, GridSearchCV, RandomizedSearchCV
 from sklearn.metrics import classification_report, confusion_matrix, f1_score, ConfusionMatrixDisplay
@@ -96,8 +93,7 @@ for train_index, test_index in my_splitter.split(data, data['Step']):
 #stratDataTest = stratDataTest.drop(columns=["Step"], axis=1)
 
 # define variables
-# since we want to predict the step value based on coordinates,
-# 
+# since we want to predict the step value based on coordinates
 y_train = trainData['Step']
 x_train = trainData.drop('Step', axis=1)
 y_test = testData['Step']
