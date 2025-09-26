@@ -42,19 +42,27 @@ for i in range (len(data['Step'])):
 # data for training and testing
 
 # plot x, y, and z for each step 7, 8, 9
+step7x = np.linspace(0, stepBounds[8]-stepBounds[7], num=stepBounds[8]-stepBounds[7])
+step8x = np.linspace(0, stepBounds[9]-stepBounds[8], num=stepBounds[9]-stepBounds[8])
+step9x = np.linspace(0, stepBounds[10]-stepBounds[9], num=stepBounds[10]-stepBounds[9])
 # step 7 plot
 fig, plot789 = plt.subplots(nrows=2,ncols=2)
-plot789[0,0].plot(data.iloc[stepBounds[7]:stepBounds[8],0], np.linspace(0, stepBounds[8]-stepBounds[7], num=stepBounds[8]-stepBounds[7]))
-plot789[0,0].plot(data.iloc[stepBounds[7]:stepBounds[8],1], np.linspace(0, stepBounds[8]-stepBounds[7], num=stepBounds[8]-stepBounds[7]))
-plot789[0,0].plot(data.iloc[stepBounds[7]:stepBounds[8],2], np.linspace(0, stepBounds[8]-stepBounds[7], num=stepBounds[8]-stepBounds[7]))
+plot789[0,0].plot(step7x, data.iloc[stepBounds[7]:stepBounds[8],0], label='X data')
+plot789[0,0].plot(step7x, data.iloc[stepBounds[7]:stepBounds[8],1], label='Y data')
+plot789[0,0].plot(step7x, data.iloc[stepBounds[7]:stepBounds[8],2], label='Z data')
 # step 8 plot
-plot789[0,1].plot(data.iloc[stepBounds[8]:stepBounds[9],0], np.linspace(0, stepBounds[9]-stepBounds[8], num=stepBounds[9]-stepBounds[8]))
-plot789[0,1].plot(data.iloc[stepBounds[8]:stepBounds[9],1], np.linspace(0, stepBounds[9]-stepBounds[8], num=stepBounds[9]-stepBounds[8]))
-plot789[0,1].plot(data.iloc[stepBounds[8]:stepBounds[9],2], np.linspace(0, stepBounds[9]-stepBounds[8], num=stepBounds[9]-stepBounds[8]))
+plot789[0,1].plot(step8x, data.iloc[stepBounds[8]:stepBounds[9],0], label='X data')
+plot789[0,1].plot(step8x, data.iloc[stepBounds[8]:stepBounds[9],1], label='Y data')
+plot789[0,1].plot(step8x, data.iloc[stepBounds[8]:stepBounds[9],2], label='Z data')
 # step 9 plot
-plot789[1,0].plot(data.iloc[stepBounds[9]:stepBounds[10],0], np.linspace(0, stepBounds[10]-stepBounds[9], num=stepBounds[10]-stepBounds[9]))
-plot789[1,0].plot(data.iloc[stepBounds[9]:stepBounds[10],1], np.linspace(0, stepBounds[10]-stepBounds[9], num=stepBounds[10]-stepBounds[9]))
-plot789[1,0].plot(data.iloc[stepBounds[9]:stepBounds[10],2], np.linspace(0, stepBounds[10]-stepBounds[9], num=stepBounds[10]-stepBounds[9]))
+plot789[1,0].plot(step9x, data.iloc[stepBounds[9]:stepBounds[10],0], label='X data')
+plot789[1,0].plot(step9x, data.iloc[stepBounds[9]:stepBounds[10],1], label='Y data')
+plot789[1,0].plot(step9x, data.iloc[stepBounds[9]:stepBounds[10],2], label='Z data')
+# plot legend and axis labels
+plot789[0,0].legend()
+plot789[0,1].legend()
+plot789[1,0].legend()
+
 # these histograms show the changes in x, y, and z over the steps 7 to 9, 
 # which can help us visualize the shape of line of best
 # fit the ML model might apply to each
