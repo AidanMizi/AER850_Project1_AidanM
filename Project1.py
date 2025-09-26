@@ -107,7 +107,7 @@ scoringArg = ['f1', 'precision', 'accuracy']
 model1 = LogisticRegression()
 param_grid1 = {
     'penalty': ['l2', 'elasticnet'],
-    'C': [1.0, 0.1, 0.001, 0.0001] }
+    'C': [10.0, 1.0, 0.1] }
 gridSearch1 = GridSearchCV(estimator=model1, param_grid=param_grid1, scoring=scoringArg, refit='accuracy')
 gridSearch1.fit(x_train, y_train)
 print("Best parameters for Logistic Regression model: \n", gridSearch1.best_params_)
