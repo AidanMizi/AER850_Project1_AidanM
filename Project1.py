@@ -31,7 +31,7 @@ for i in range (len(data['Step'])):
 
 
 # VISUALIZE THE DATA
-##data.hist(bins=13,edgecolor='black')
+data.hist(bins=13,edgecolor='black')
 # this simple histogram of the data shows how many times each x, y, 
 # and z coordinate occur. This helps us see that z has a good distribution
 # of values, while x and y have a little more random distribution.
@@ -40,6 +40,12 @@ for i in range (len(data['Step'])):
 # this also shows that most of the amount of steps are made up of
 # steps 7, 8, and 9, something we have to account for when splitting the 
 # data for training and testing
+
+# also plot all of the data in x y and z not just histogram
+plt.figure()
+data1 = data.drop('Step', axis=1)
+data1.plot()
+
 
 # plot x, y, and z for each step 7, 8, 9
 step7x = np.linspace(0, stepBounds[8]-stepBounds[7], num=stepBounds[8]-stepBounds[7])
