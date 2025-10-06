@@ -41,6 +41,17 @@ data.hist(bins=13,edgecolor='black')
 # steps 7, 8, and 9, something we have to account for when splitting the 
 # data for training and testing
 
+fig1 = plt.figure(figsize = [12, 15])
+scat = fig1.add_subplot(111, projection='3d')
+scatter = scat.scatter(data['X'],data['Y'],data['Z'], c=data['Step'],cmap='tab20')
+scat.set_xlabel('X')
+scat.set_ylabel('Y')
+scat.set_zlabel('Z')
+scat.set_title('3D maintenance steps')
+legend = scat.legend(*scatter.legend_elements(), title="Step")
+scat.add_artist(legend)
+
+
 # also plot all of the data in x y and z not just histogram
 plt.figure()
 data1 = data.drop('Step', axis=1)
@@ -196,9 +207,9 @@ dispConf.plot()
 # model 1 and model 2 were chosen for this part.
 # model 2 and 3 performed perfectly.
 estimatorsList = [
-    ('lr', LogisticRegression())    
+    ('lr', LogisticRegression(**gridSearch1.best_params_))    
 ]
-model5 = StackingClassifier(estimators=estimatorsList, final_estimator=svm.SVC())
+model5 = StackingClassifier(estimators=estimatorsList, final_estimator=svm.SVC(**gridSearch2.best_params_))
 model5.fit(x_train, y_train)
 y_pred5 = model5.predict(x_test)
 report5 = classification_report(y_test, y_pred5)
